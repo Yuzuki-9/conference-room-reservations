@@ -9,29 +9,30 @@ page = st.sidebar.selectbox('Choose your page', ['users', 'rooms', 'bookings'])
 
 # ユーザー画面
 if page == 'users':
-    st.title('APIテスト画面（ユーザー）')
+    st.title('ユーザー登録画面')
 
     # formの中身にどういう項目を入れるのか→withの中身で指定する
     with st.form(key='user'):  # keyはformとの紐付け
-        user_id: int = random.randint(0, 10)  # user_idは登録したタイミングで決める
+        # user_id: int = random.randint(0, 10)  # user_idは登録したタイミングで決める
         username: str = st.text_input('ユーザ名', max_chars=12)  # , max12文字
         # userのpostで必要なデータを送ってあげる
         data = {
-            'user_id': user_id,
+            # 'user_id': user_id,
             'username': username
         }
-        submit_button = st.form_submit_button(label='リクエスト送信')  # formに紐づく送信ボタン
+        submit_button = st.form_submit_button(label='ユーザー登録')  # formに紐づく送信ボタン
 
     # submit_buttonが押されたとき（リクエスト送信されたとき）
     if submit_button:
         st.write('## 送信データ')
-        st.json(data)
         st.write('## レスポンス結果')
         url = 'http://127.0.0.1:8000/users'
         res = requests.post(
             url,
             data=json.dumps(data)
         )
+        if res.status_code == 200:
+            st.success('ユーザー登録完了')
         st.write(res.status_code)
         st.json(res.json())
 
